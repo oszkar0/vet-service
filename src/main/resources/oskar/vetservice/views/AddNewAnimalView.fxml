@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="oskar.vetservice.AddNewAnimalController"
+            prefHeight="400.0" prefWidth="600.0"
+            fx:id="newAnimalWindow">
+    <content>
+        <GridPane vgap="10" hgap="10">
+            <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label text="Species:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="speciesTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Gender:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="genderComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Male"/>
+                        <String fx:value="Female"/>
+                        <String fx:value="Unknown"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Label text="Date of birth:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="birthdayDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <Button text="Pick a photo" GridPane.columnIndex="0" GridPane.rowIndex="4" onAction="#showPhotoChooser"/>
+        </GridPane>
+
+    </content>
+</DialogPane>

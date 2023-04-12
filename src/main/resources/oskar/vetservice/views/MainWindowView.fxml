@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+
+
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="oskar.vetservice.MainWindowController"
+            fx:id="mainWindow">
+    <center>
+        <VBox>
+            <TableView>
+                <columns>
+
+                    <TableColumn text="Name">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Gender">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Age">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+
+                </columns>
+            </TableView>
+
+            <TableView>
+                <columns>
+
+                    <TableColumn text="Name">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Surname">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Address">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Email">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text = "Phone Number">
+                        <cellValueFactory>
+
+                        </cellValueFactory>
+                    </TableColumn>
+
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    <right>
+        <VBox>
+            <children>
+                <Button text="View animal details" maxWidth="Infinity"/>
+                <Button text="Add new animal" maxWidth="Infinity" onMouseClicked="#showNewAnimalDialog"/>
+            </children>
+        </VBox>
+    </right>
+</BorderPane>
