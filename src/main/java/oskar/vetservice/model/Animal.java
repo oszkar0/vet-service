@@ -10,15 +10,14 @@ public class Animal {
     private SimpleStringProperty name = new SimpleStringProperty("");
     private SimpleStringProperty species = new SimpleStringProperty("");
     private SimpleStringProperty gender = new SimpleStringProperty("");;
-    private LocalDate dateOfBirth;
-    private String ownerId;
-    private int age;
+    private LocalDate birthday;
+    private int ownerId;
 
-    public Animal(SimpleStringProperty name, SimpleStringProperty breed, SimpleStringProperty gender, LocalDate dateOfBirth, String ownerId) {
-        this.name = name;
-        this.species = breed;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
+    public Animal(String name, String species, String gender, LocalDate birthday, int ownerId) {
+        this.name.set(name);
+        this.species.set(species);
+        this.gender.set(gender);
+        this.birthday = birthday;
         this.ownerId = ownerId;
     }
 
@@ -34,16 +33,16 @@ public class Animal {
         this.name.set(name);
     }
 
-    public String getBreed() {
+    public String getSpecies() {
         return species.get();
     }
 
-    public SimpleStringProperty breedProperty() {
+    public SimpleStringProperty speciesProperty() {
         return species;
     }
 
-    public void setBreed(String breed) {
-        this.species.set(breed);
+    public void setSpecies(String species) {
+        this.species.set(species);
     }
 
     public String getGender() {
@@ -58,19 +57,19 @@ public class Animal {
         this.gender.set(gender);
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getBirthday() {
+        return birthday;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
     }
 }

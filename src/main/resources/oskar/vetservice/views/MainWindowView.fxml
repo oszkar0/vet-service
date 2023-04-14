@@ -7,29 +7,30 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="oskar.vetservice.MainWindowController"
             fx:id="mainWindow">
     <center>
         <VBox>
-            <TableView>
+            <TableView fx:id="animalsTableView">
                 <columns>
 
                     <TableColumn text="Name">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="name"/>
                         </cellValueFactory>
                     </TableColumn>
 
                     <TableColumn text = "Gender">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="gender"/>
                         </cellValueFactory>
                     </TableColumn>
 
-                    <TableColumn text = "Age">
+                    <TableColumn text = "species">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="species"/>
                         </cellValueFactory>
                     </TableColumn>
 
@@ -37,36 +38,30 @@
                 </columns>
             </TableView>
 
-            <TableView>
+            <TableView fx:id="ownersTableView">
                 <columns>
 
                     <TableColumn text="Name">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="name"/>
                         </cellValueFactory>
                     </TableColumn>
 
-                    <TableColumn text = "Surname">
+                    <TableColumn text="Surname">
                         <cellValueFactory>
-
-                        </cellValueFactory>
-                    </TableColumn>
-
-                    <TableColumn text = "Address">
-                        <cellValueFactory>
-
+                            <PropertyValueFactory property="surname"/>
                         </cellValueFactory>
                     </TableColumn>
 
                     <TableColumn text = "Email">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="email"/>
                         </cellValueFactory>
                     </TableColumn>
 
                     <TableColumn text = "Phone Number">
                         <cellValueFactory>
-
+                            <PropertyValueFactory property="phoneNumber"/>
                         </cellValueFactory>
                     </TableColumn>
 
@@ -78,7 +73,9 @@
         <VBox>
             <children>
                 <Button text="View animal details" maxWidth="Infinity"/>
-                <Button text="Add new animal" maxWidth="Infinity" onMouseClicked="#showNewAnimalDialog"/>
+                <Button text="Add new animal for selected person" maxWidth="Infinity"/>
+                <Button text="Add new owner" maxWidth="Infinity"/>
+                <Button text="View selected person animals" maxWidth="Infinity"/>
             </children>
         </VBox>
     </right>
