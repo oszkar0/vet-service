@@ -74,7 +74,7 @@
             <children>
                 <Button text="View animal details" maxWidth="Infinity"/>
                 <Button text="Add new animal for selected person" maxWidth="Infinity"/>
-                <Button text="Add new owner" maxWidth="Infinity"/>
+                <Button text="Add new owner" maxWidth="Infinity" onMouseClicked="#showAddNewOwnerWindow"/>
                 <Button text="View selected person animals" maxWidth="Infinity"/>
             </children>
         </VBox>

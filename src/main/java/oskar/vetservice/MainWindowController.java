@@ -23,5 +23,28 @@ public class MainWindowController {
     @FXML
     private BorderPane mainWindow;
 
+    @FXML
+    public void showAddNewOwnerWindow(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add new owner");
+        dialog.initOwner(mainWindow.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("views/AddNewOwnerView.fxml"));
 
+        try{
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e){
+            System.out.println("Couldn't load the new owner dialog: " + e.getMessage());
+            return;
+        }
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            AddNewOwnerController controller = fxmlLoader.getController();
+            //add results processing
+        }
+    }
 }

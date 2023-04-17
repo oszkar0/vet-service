@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="oskar.vetservice.AddNewOwnerController"
+            prefHeight="400.0" prefWidth="600.0"
+            fx:id="newOwnerWindow">
+    <content>
+        <GridPane vgap="10" hgap="10">
+            <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label text="Surname:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="surnameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="City:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="cityTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Street:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="streetTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="House number:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <TextField fx:id="houseNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Phone number:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <TextField fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+        </GridPane>
+    </content>
+</DialogPane>
+
