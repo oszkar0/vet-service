@@ -1,8 +1,11 @@
 package oskar.vetservice.model;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataSource {
     public static final String DB_NAME = "Service.db";
@@ -76,7 +79,7 @@ public class DataSource {
 
     private Connection connection;
 
-    private PreparedStatement queryAnimalCountByNameOwnerIdBirthday;
+    private PreparedStatement queryAnimalsCountByNameOwnerIdBirthday;
     private PreparedStatement queryOwnersCountByNameSurnamePhoneNumber;
     private PreparedStatement queryAllOwners;
     private PreparedStatement queryAllAnimals;
@@ -95,7 +98,7 @@ public class DataSource {
             connection = DriverManager.getConnection(CONNECTION_STRING);
             createTables();
 
-            queryAnimalCountByNameOwnerIdBirthday = connection.prepareStatement(QUERY_ANIMAL_COUNT_BY_NAME_OWNER_BIRTHDAY);
+            queryAnimalsCountByNameOwnerIdBirthday = connection.prepareStatement(QUERY_ANIMAL_COUNT_BY_NAME_OWNER_BIRTHDAY);
             insertAnimal = connection.prepareStatement(INSERT_ANIMAL);
             insertOwner = connection.prepareStatement(INSERT_OWNER);
             queryAllAnimals = connection.prepareStatement(QUERY_ALL_ANIMALS);
@@ -124,8 +127,8 @@ public class DataSource {
     }
     public void close(){
         try{
-            if(queryAnimalCountByNameOwnerIdBirthday != null){
-                queryAnimalCountByNameOwnerIdBirthday.close();
+            if(queryAnimalsCountByNameOwnerIdBirthday != null){
+                queryAnimalsCountByNameOwnerIdBirthday.close();
             }
 
             if(insertAnimal != null){
@@ -164,11 +167,11 @@ public class DataSource {
 
     public boolean ownerHasAnimal(String name, LocalDate date, int ownerId) throws SQLException{
         String dateConverted = dateToString(date);
-        queryAnimalCountByNameOwnerIdBirthday.setString(1, name);
-        queryAnimalCountByNameOwnerIdBirthday.setInt(2, ownerId);
-        queryAnimalCountByNameOwnerIdBirthday.setString(3, dateConverted);
+        queryAnimalsCountByNameOwnerIdBirthday.setString(1, name.toLowerCase());
+        queryAnimalsCountByNameOwnerIdBirthday.setInt(2, ownerId);
+        queryAnimalsCountByNameOwnerIdBirthday.setString(3, dateConverted);
 
-        ResultSet result = queryAnimalCountByNameOwnerIdBirthday.executeQuery();
+        ResultSet result = queryAnimalsCountByNameOwnerIdBirthday.executeQuery();
 
         if(result.getInt("count") > 0){
             return true;
@@ -179,12 +182,12 @@ public class DataSource {
     public int insertAnimal(String name, int ownerId, LocalDate date,
                              String species, String gender, String photoPath) throws SQLException{
 
-        insertAnimal.setString(1, name);
+        insertAnimal.setString(1, name.toLowerCase());
         insertAnimal.setString(2, gender);
         insertAnimal.setString(3, dateToString(date));
         insertAnimal.setInt(4, ownerId);
         insertAnimal.setString(5, photoPath);
-        insertAnimal.setString(6, species);
+        insertAnimal.setString(6, species.toLowerCase());
 
         int affectedRows = insertAnimal.executeUpdate();
 
@@ -201,12 +204,97 @@ public class DataSource {
         }
     }
 
+    public int insertOwner(String name, String surname, String city, String street, String houseNumber,
+                           String phoneNumber, String email) throws SQLException{
+        insertOwner.setString(1,name.toLowerCase());
+        insertOwner.setString(2, surname.toLowerCase());
+        insertOwner.setString(3, city.toLowerCase());
+        insertOwner.setString(4, street.toLowerCase());
+        insertOwner.setString(5, houseNumber);
+        insertOwner.setString(6, phoneNumber);
+        insertOwner.setString(7, email);
+
+        int affectedRows = insertOwner.executeUpdate();
+
+        if(affectedRows != 1){
+            throw new SQLException("Animal insertion failed!");
+        }
+
+        ResultSet generatedKeys = insertAnimal.getGeneratedKeys();
+
+        if(generatedKeys.next()){
+            return generatedKeys.getInt(1);
+        } else {
+            throw new SQLException("Couldn't get id for owner");
+        }
+    }
+
+    public boolean ownerExists(String name, String surname, String phoneNumber) throws SQLException{
+        queryOwnersCountByNameSurnamePhoneNumber.setString(1, name.toLowerCase());
+        queryOwnersCountByNameSurnamePhoneNumber.setString(2, surname.toLowerCase());
+        queryOwnersCountByNameSurnamePhoneNumber.setString(3, phoneNumber);
+
+        ResultSet result = queryOwnersCountByNameSurnamePhoneNumber.executeQuery();
+
+        if(result.getInt("count") > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public List<Owner> getAllOwners() throws SQLException{
+        ResultSet results =  queryAllOwners.executeQuery();
+
+        List<Owner> owners = new ArrayList<>();
+
+        while(results.next()){
+            Owner owner = new Owner();
+            owner.setId(results.getInt(1));
+            owner.setName(capitalizeFirstLetter(results.getString(2)));
+            owner.setSurname(capitalizeFirstLetter(capitalizeFirstLetter(results.getString(3))));
+            owner.setCity(capitalizeFirstLetter(results.getString(4)));
+            owner.setStreet(capitalizeFirstLetter(results.getString(5)));
+            owner.setHouseNumber(results.getString(6));
+            owner.setPhoneNumber(results.getString(7));
+            owner.setEmail(results.getString(8));
+            owners.add(owner);
+        }
+
+        return owners;
+    }
+
+    public List<Animal> getAllAnimals() throws SQLException{
+        ResultSet results = queryAllAnimals.executeQuery();
+
+        List<Animal> animals = new ArrayList<>();
+
+        while(results.next()){
+            Animal animal = new Animal();
+            animal.setId(results.getInt(1));
+            animal.setName(capitalizeFirstLetter(results.getString(2)));
+            animal.setBirthday(stringToDate(results.getString(3)));
+            animal.setSpecies(results.getString(4));
+            animal.setGender(results.getString(5));
+            animal.setPhotoPath(results.getString(6));
+            animal.setOwnerId(results.getInt(7));
+            animals.add(animal);
+        }
+
+        return animals;
+    }
+
+
+
     private LocalDate stringToDate(String date){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
     }
 
     private String dateToString(LocalDate date){
         return date.format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+    }
+
+    private String capitalizeFirstLetter(String word){
+        return word.substring(0,1).toUpperCase() + word.substring(1).toLowerCase();
     }
 
 }

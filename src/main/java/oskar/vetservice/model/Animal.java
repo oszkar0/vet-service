@@ -7,11 +7,14 @@ import java.util.Date;
 
 public class Animal {
 
+    private int id;
     private SimpleStringProperty name = new SimpleStringProperty("");
     private SimpleStringProperty species = new SimpleStringProperty("");
-    private SimpleStringProperty gender = new SimpleStringProperty("");;
+    private SimpleStringProperty gender = new SimpleStringProperty("");
+    String photoPath;
     private LocalDate birthday;
     private int ownerId;
+
 
     public Animal(String name, String species, String gender, LocalDate birthday, int ownerId) {
         this.name.set(name);
@@ -19,6 +22,24 @@ public class Animal {
         this.gender.set(gender);
         this.birthday = birthday;
         this.ownerId = ownerId;
+    }
+
+    public Animal(){}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public String getName() {
