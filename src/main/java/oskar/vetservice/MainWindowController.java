@@ -1,7 +1,9 @@
 package oskar.vetservice;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +14,9 @@ import oskar.vetservice.model.DataSource;
 import oskar.vetservice.model.Owner;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class MainWindowController {
@@ -28,6 +33,12 @@ public class MainWindowController {
         owners = FXCollections.observableArrayList();
         ownersTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         ownersTableView.setItems(owners);
+        try {
+            owners.setAll(DataSource.getInstance().getAllOwners());
+        } catch(SQLException e){
+            System.out.println("Error getting owners from db: " + e.getMessage());
+            Platform.exit();
+        }
     }
     @FXML
     public void showAddNewOwnerWindow(){
