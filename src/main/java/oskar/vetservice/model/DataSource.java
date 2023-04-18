@@ -8,28 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSource {
-    public static final String DB_NAME = "Service.db";
-    public static final String CONNECTION_STRING = "jdbc:sqlite:src/main/resources/oskar/vetservice/db/" + DB_NAME;
+    private static final String DB_NAME = "Service.db";
+    private static final String CONNECTION_STRING = "jdbc:sqlite:src/main/resources/oskar/vetservice/db/" + DB_NAME;
 
-    public static final String TABLE_ANIMALS = "animals";
-    public static final String COLUMN_ANIMALS_ID = "_id";
-    public static final String COLUMN_ANIMALS_NAME = "name";
-    public static final String COLUMN_ANIMALS_DATE_OF_BIRTH = "birth_date";
-    public static final String COLUMN_ANIMALS_SPECIES = "species";
-    public static final String COLUMN_ANIMALS_GENDER = "gender";
-    public static final String COLUMN_ANIMALS_PHOTO_PATH = "photo_path";
-    public static final String COLUMN_ANIMALS_OWNER_ID = "owner_id";
+    private static final String TABLE_ANIMALS = "animals";
+    private static final String COLUMN_ANIMALS_ID = "_id";
+    private static final String COLUMN_ANIMALS_NAME = "name";
+    private static final String COLUMN_ANIMALS_DATE_OF_BIRTH = "birth_date";
+    private static final String COLUMN_ANIMALS_SPECIES = "species";
+    private static final String COLUMN_ANIMALS_GENDER = "gender";
+    private static final String COLUMN_ANIMALS_PHOTO_PATH = "photo_path";
+    private static final String COLUMN_ANIMALS_OWNER_ID = "owner_id";
 
 
-    public static final String TABLE_OWNERS = "owners";
-    public static final String COLUMN_OWNERS_ID = "_id";
-    public static final String COLUMN_OWNERS_NAME = "name";
-    public static final String COLUMN_OWNERS_SURNAME = "surname";
-    public static final String COLUMN_OWNERS_CITY = "city";
-    public static final String COLUMN_OWNERS_STREET = "street";
-    public static final String COLUMN_OWNERS_HOUSE_NUMBER = "house_number";
-    public static final String COLUMN_OWNERS_PHONE_NUMBER = "number";
-    public static final String COLUMN_OWNERS_EMAIL = "email";
+    private static final String TABLE_OWNERS = "owners";
+    private static final String COLUMN_OWNERS_ID = "_id";
+    private static final String COLUMN_OWNERS_NAME = "name";
+    private static final String COLUMN_OWNERS_SURNAME = "surname";
+    private static final String COLUMN_OWNERS_CITY = "city";
+    private static final String COLUMN_OWNERS_STREET = "street";
+    private static final String COLUMN_OWNERS_HOUSE_NUMBER = "house_number";
+    private static final String COLUMN_OWNERS_PHONE_NUMBER = "number";
+    private static final String COLUMN_OWNERS_EMAIL = "email";
 
     public static final String CREATE_ANIMALS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ANIMALS + " ("
             + COLUMN_ANIMALS_ID + " INTEGER PRIMARY KEY  NOT NULL, "
