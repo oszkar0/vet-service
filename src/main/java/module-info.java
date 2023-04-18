@@ -5,5 +5,6 @@ module oskar.vetservice {
 
 
     opens oskar.vetservice to javafx.fxml;
+    opens oskar.vetservice.model to javafx.base;
     exports oskar.vetservice;
 }

@@ -12,6 +12,20 @@ public class Owner {
     private String street;
     private String houseNumber;
 
+    public Owner(int id, String name, String surname, String phoneNumber, String email, String city, String street, String houseNumber) {
+        this.id = id;
+        this.name.set(name);
+        this.surname.set(surname);
+        this.phoneNumber.set(phoneNumber);
+        this.email.set(email);
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
+    }
+
+    public Owner() {
+    }
+
     public int getId() {
         return id;
     }

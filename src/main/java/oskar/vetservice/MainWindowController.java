@@ -1,12 +1,11 @@
 package oskar.vetservice;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import oskar.vetservice.model.Animal;
 import oskar.vetservice.model.DataSource;
@@ -23,6 +22,13 @@ public class MainWindowController {
     @FXML
     private BorderPane mainWindow;
 
+    ObservableList<Owner> owners;
+    @FXML
+    public void initialize(){
+        owners = FXCollections.observableArrayList();
+        ownersTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        ownersTableView.setItems(owners);
+    }
     @FXML
     public void showAddNewOwnerWindow(){
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -44,7 +50,8 @@ public class MainWindowController {
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK){
             AddNewOwnerController controller = fxmlLoader.getController();
-            //add results processing
+            Owner owner = controller.processOwnerAdding();
+            owners.add(owner);
         }
     }
 }
