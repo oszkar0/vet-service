@@ -65,4 +65,38 @@ public class MainWindowController {
             owners.add(owner);
         }
     }
+
+    @FXML
+    public void showAddNewAnimalWindow(){
+        Owner selectedOwner = ownersTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedOwner == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No owner selected");
+            alert.setHeaderText("You didn't select the animal's owner");
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Add new animal to " + selectedOwner.getName() + " " + selectedOwner.getSurname());
+        dialog.initOwner(mainWindow.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("views/AddNewAnimalView.fxml"));
+
+        try{
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e){
+            System.out.println("Couldn't load the new animal dialog: " + e.getMessage());
+            return;
+        }
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            //result processing
+        }
+    }
 }
