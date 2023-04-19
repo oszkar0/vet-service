@@ -31,7 +31,7 @@ public class DataSource {
     private static final String COLUMN_OWNERS_PHONE_NUMBER = "number";
     private static final String COLUMN_OWNERS_EMAIL = "email";
 
-    public static final String CREATE_ANIMALS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ANIMALS + " ("
+    private static final String CREATE_ANIMALS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ANIMALS + " ("
             + COLUMN_ANIMALS_ID + " INTEGER PRIMARY KEY  NOT NULL, "
             + COLUMN_ANIMALS_NAME + " TEXT, "
             + COLUMN_ANIMALS_DATE_OF_BIRTH + " TEXT, "
@@ -41,7 +41,7 @@ public class DataSource {
             + COLUMN_ANIMALS_OWNER_ID + " INTEGER, "
             + "FOREIGN KEY(" + COLUMN_ANIMALS_OWNER_ID + ") REFERENCES " + TABLE_OWNERS + "(" + COLUMN_OWNERS_ID + "))";
 
-    public static final String CREATE_OWNERS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ("
+    private static final String CREATE_OWNERS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ("
             + COLUMN_OWNERS_ID + " INTEGER PRIMARY KEY  NOT NULL, "
             + COLUMN_OWNERS_NAME + " TEXT, "
             + COLUMN_OWNERS_SURNAME + " TEXT, "
@@ -51,27 +51,27 @@ public class DataSource {
             + COLUMN_OWNERS_PHONE_NUMBER + " TEXT, "
             + COLUMN_OWNERS_EMAIL + " TEXT)";
 
-    public static final String QUERY_ANIMAL_COUNT_BY_NAME_OWNER_BIRTHDAY = "SELECT COUNT(*) AS count FROM " + TABLE_ANIMALS + " WHERE "
+    private static final String QUERY_ANIMAL_COUNT_BY_NAME_OWNER_BIRTHDAY = "SELECT COUNT(*) AS count FROM " + TABLE_ANIMALS + " WHERE "
             + COLUMN_ANIMALS_NAME + " = ? AND "
             + COLUMN_ANIMALS_OWNER_ID + " = ? AND "
             + COLUMN_ANIMALS_DATE_OF_BIRTH + " = ?";
 
-    public static final String INSERT_ANIMAL = "INSERT INTO " + TABLE_ANIMALS + "(" + COLUMN_ANIMALS_NAME + ", "
+    private static final String INSERT_ANIMAL = "INSERT INTO " + TABLE_ANIMALS + "(" + COLUMN_ANIMALS_NAME + ", "
             + COLUMN_ANIMALS_GENDER + ", " + COLUMN_ANIMALS_DATE_OF_BIRTH + ", " + COLUMN_ANIMALS_OWNER_ID + ", "
             + COLUMN_ANIMALS_PHOTO_PATH + ", " + COLUMN_ANIMALS_SPECIES + ") VALUES(?, ?, ?, ?, ?, ?)";
 
-    public static final String INSERT_OWNER = "INSERT INTO " + TABLE_OWNERS + "(" + COLUMN_OWNERS_NAME + ", " + COLUMN_OWNERS_SURNAME
+    private static final String INSERT_OWNER = "INSERT INTO " + TABLE_OWNERS + "(" + COLUMN_OWNERS_NAME + ", " + COLUMN_OWNERS_SURNAME
             + ", " + COLUMN_OWNERS_CITY + ", " + COLUMN_OWNERS_STREET + ", " + COLUMN_OWNERS_HOUSE_NUMBER + ", " + COLUMN_OWNERS_PHONE_NUMBER
             + ", " + COLUMN_OWNERS_EMAIL + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-    public static final String QUERY_OWNERS_COUNT_BY_NAME_SURNAME_PHONE_NUMBER = "SELECT COUNT(*) AS count FROM " + TABLE_OWNERS
+    private static final String QUERY_OWNERS_COUNT_BY_NAME_SURNAME_PHONE_NUMBER = "SELECT COUNT(*) AS count FROM " + TABLE_OWNERS
             + " WHERE " + COLUMN_OWNERS_NAME + " = ? AND " + COLUMN_OWNERS_SURNAME + " = ? AND " + COLUMN_OWNERS_PHONE_NUMBER + " = ?";
 
-    public static final String QUERY_ALL_OWNERS = "SELECT * FROM " + TABLE_OWNERS;
-    public static final String QUERY_ALL_ANIMALS = "SELECT * FROM " + TABLE_ANIMALS;
-    public static final String QUERY_ANIMALS_BY_NAME = QUERY_ALL_ANIMALS + " WHERE "
+    private static final String QUERY_ALL_OWNERS = "SELECT * FROM " + TABLE_OWNERS;
+    private static final String QUERY_ALL_ANIMALS = "SELECT * FROM " + TABLE_ANIMALS;
+    private static final String QUERY_ANIMALS_BY_NAME = QUERY_ALL_ANIMALS + " WHERE "
             + COLUMN_ANIMALS_NAME +" LIKE ?";
-    public static final String QUERY_OWNERS_BY_NAME_OR_SURNAME = QUERY_ALL_OWNERS + " WHERE "
+    private static final String QUERY_OWNERS_BY_NAME_OR_SURNAME = QUERY_ALL_OWNERS + " WHERE "
             + COLUMN_OWNERS_NAME +" LIKE ? OR " + COLUMN_OWNERS_SURNAME +" LIKE ?";
 
 
