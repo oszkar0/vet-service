@@ -165,8 +165,8 @@ public class DataSource {
 
     }
 
-    public boolean ownerHasAnimal(String name, LocalDate date, int ownerId) throws SQLException{
-        String dateConverted = dateToString(date);
+    public boolean ownerHasAnimal(String name, LocalDate birthday, int ownerId) throws SQLException{
+        String dateConverted = dateToString(birthday);
         queryAnimalsCountByNameOwnerIdBirthday.setString(1, name.toLowerCase());
         queryAnimalsCountByNameOwnerIdBirthday.setInt(2, ownerId);
         queryAnimalsCountByNameOwnerIdBirthday.setString(3, dateConverted);
