@@ -13,16 +13,19 @@ public class StartupData {
     };
     public static StartupData getInstance(){return instance;}
 
-    public void readStartupData() throws IOException{
+    public boolean readStartupData(){
         try {
             BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
             nextPhotoId = Integer.parseInt(reader.readLine());
             reader.close();
+            return true;
         } catch (FileNotFoundException e) {
             // File doesn't exist, initialize with default values
             nextPhotoId = 1;
+            return true;
         } catch (IOException e) {
-            throw new IOException("Couldn't open startup file: " + e.getMessage());
+            System.out.println("Couldn't open startup file: " + e.getMessage());
+            return false;
         }
     }
 
