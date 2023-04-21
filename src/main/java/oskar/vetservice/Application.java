@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import oskar.vetservice.model.DataSource;
+import oskar.vetservice.startup.StartupData;
 
 import java.io.IOException;
 
@@ -27,12 +28,17 @@ public class Application extends javafx.application.Application {
             System.out.println("FATAL ERROR: Couldn't connect to database");
             Platform.exit();
         }
+        if(!StartupData.getInstance().readStartupData()) {
+            System.out.println("FATAL ERROR: Couldn't open startup file");
+            Platform.exit();
+        }
     }
 
     @Override
     public void stop() throws Exception {
         super.stop();
         DataSource.getInstance().close();
+        StartupData.getInstance().saveStartupData();
     }
 
 
