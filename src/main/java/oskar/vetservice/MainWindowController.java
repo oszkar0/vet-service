@@ -28,6 +28,7 @@ public class MainWindowController {
     private BorderPane mainWindow;
 
     ObservableList<Owner> owners;
+    ObservableList<Animal> animals;
     @FXML
     public void initialize(){
         owners = FXCollections.observableArrayList();
@@ -37,6 +38,16 @@ public class MainWindowController {
             owners.setAll(DataSource.getInstance().getAllOwners());
         } catch(SQLException e){
             System.out.println("Error getting owners from db: " + e.getMessage());
+            Platform.exit();
+        }
+
+        animals = FXCollections.observableArrayList();
+        animalsTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        animalsTableView.setItems(animals);
+        try {
+            animals.setAll(DataSource.getInstance().getAllAnimals());
+        } catch(SQLException e){
+            System.out.println("Error getting animals from db: " + e.getMessage());
             Platform.exit();
         }
     }
@@ -62,7 +73,9 @@ public class MainWindowController {
         if(result.isPresent() && result.get() == ButtonType.OK){
             AddNewOwnerController controller = fxmlLoader.getController();
             Owner owner = controller.processOwnerAdding();
-            owners.add(owner);
+            if(owner != null) {
+                owners.add(owner);
+            }
         }
     }
 
@@ -96,7 +109,11 @@ public class MainWindowController {
 
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK){
-            //result processing
+            AddNewAnimalController controller = fxmlLoader.getController();
+            Animal animal = controller.processAnimalAdding(selectedOwner.getId());
+            if(animal != null){
+                animals.add(animal);
+            }
         }
     }
 }
