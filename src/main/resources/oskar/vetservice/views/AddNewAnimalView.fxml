@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -12,8 +11,9 @@
             fx:controller="oskar.vetservice.AddNewAnimalController"
             prefHeight="400.0" prefWidth="600.0"
             fx:id="newAnimalWindow">
+
     <content>
-        <GridPane vgap="10" hgap="10">
+        <GridPane>
             <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             <Label text="Species:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
@@ -30,8 +30,9 @@
             </ComboBox>
             <Label text="Date of birth:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
             <DatePicker fx:id="birthdayDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-            <Button text="Pick a photo" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <Button text="Pick a photo" GridPane.columnIndex="0" GridPane.rowIndex="4" onMouseClicked="#chooseAnimalsPhoto"/>
+            <Label fx:id="photoLabel" text="You have not choosen animals photo" textFill="red"  GridPane.columnIndex="0" GridPane.rowIndex="7"/>
         </GridPane>
-
     </content>
+
 </DialogPane>
