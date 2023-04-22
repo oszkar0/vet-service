@@ -16,12 +16,13 @@ public class Animal {
     private int ownerId;
 
 
-    public Animal(String name, String species, String gender, LocalDate birthday, int ownerId) {
+    public Animal(String name, String species, String gender, LocalDate birthday, int ownerId, String photoPath) {
         this.name.set(name);
         this.species.set(species);
         this.gender.set(gender);
         this.birthday = birthday;
         this.ownerId = ownerId;
+        this.photoPath = photoPath;
     }
 
     public Animal(){}
