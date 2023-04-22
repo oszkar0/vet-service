@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="oskar.vetservice.AnimalsDetailsController"
+          prefHeight="400.0" prefWidth="600.0">
+
+        <Label text="Animal:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <ImageView fx:id="animalPhoto" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="nameLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Species:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label fx:id="speciesLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="Date of birth (age):" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <Label fx:id="birthdayAndAgeLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Label text="Gender:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <Label fx:id="genderLabel" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <Label text="Owner:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <Label text="Name and surname:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+        <Label fx:id="nameAndSurnameLabel" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+        <Label fx:id="emailLabel" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        <Label text="Phone number:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+        <Label fx:id="phoneNumberLabel" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+        <Label text="Addres:" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+        <Label fx:id="addressLabel" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+</GridPane>
