@@ -60,7 +60,7 @@ public class AddNewAnimalController {
 
         if(choosenPhoto != null){
             Path sourcePath = choosenPhoto.toPath();
-            Path destinationPath = Paths.get("animalsphotos\"
+            Path destinationPath = Paths.get("animalsphotos\\"
                     + StartupData.getInstance().getNextPhotoId() + choosenPhoto.getName().substring(choosenPhoto.getName().lastIndexOf('.')));
             try {
                 Files.copy(sourcePath, destinationPath);

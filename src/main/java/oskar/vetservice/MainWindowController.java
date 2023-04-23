@@ -7,8 +7,11 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import oskar.vetservice.model.Animal;
 import oskar.vetservice.model.DataSource;
 import oskar.vetservice.model.Owner;
@@ -115,5 +118,38 @@ public class MainWindowController {
                 animals.add(animal);
             }
         }
+    }
+
+    @FXML
+    public void showAnimalsDetailsWindow(){
+        Animal selectedAnimal = animalsTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedAnimal == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No animal selected");
+            alert.setHeaderText("You didn't select the animal");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/AnimalsDetailsView.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle(selectedAnimal.getName() + " details");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(mainWindow.getScene().getWindow());
+            stage.setScene(new Scene(root));
+
+            AnimalsDetailsController controller = fxmlLoader.getController();
+            controller.setContent(selectedAnimal.getPhotoPath(), selectedAnimal.getName() ,selectedAnimal.getSpecies(), selectedAnimal.getBirthday(), selectedAnimal.getGender(),
+                    "x" , "x" , "x" , "x", "x ", "y", "y");
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            System.out.println("Error loading AnimalsDetailsView.fxml: " + e.getMessage());
+        }
+
     }
 }

@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -33,7 +34,7 @@ public class AnimalsDetailsController {
             return;
         }
 
-        animalPhoto.setImage(new Image(path));
+        animalPhoto.setImage(new Image("file:" + path));
     }
 
     public void setAnimalNameLabel(String name){
