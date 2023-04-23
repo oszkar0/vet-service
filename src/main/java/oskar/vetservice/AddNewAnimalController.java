@@ -60,12 +60,12 @@ public class AddNewAnimalController {
 
         if(choosenPhoto != null){
             Path sourcePath = choosenPhoto.toPath();
-            Path destinationPath = Paths.get("src/main/resources/oskar/vetservice/animalsphotos/"
+            Path destinationPath = Paths.get("animalsphotos\"
                     + StartupData.getInstance().getNextPhotoId() + choosenPhoto.getName().substring(choosenPhoto.getName().lastIndexOf('.')));
             try {
                 Files.copy(sourcePath, destinationPath);
                 //we save the photo in animalsphotos folder and save the relative path to it
-                pathToPhoto = destinationPath.toAbsolutePath().relativize(Paths.get("").toAbsolutePath()).toString();
+                pathToPhoto = Paths.get("").toAbsolutePath().relativize(destinationPath.toAbsolutePath()).toString();
             }catch (IOException e){
                 System.out.println("Error copying an image to animalsphotos folder: " + e.getMessage());
                 pathToPhoto = "none";

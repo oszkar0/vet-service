@@ -6,7 +6,7 @@ import java.io.*;
 
 public class StartupData {
     private int nextPhotoId;
-    private static String FILE_NAME = "src/main/resources/oskar/vetservice/startupfiles/startup_data.txt";
+    private static String FILE_NAME = "startupfiles/startup_data.txt";
     private static StartupData instance = new StartupData();
 
     private StartupData(){

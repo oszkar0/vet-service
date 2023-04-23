@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DataSource {
     private static final String DB_NAME = "Service.db";
-    private static final String CONNECTION_STRING = "jdbc:sqlite:src/main/resources/oskar/vetservice/db/" + DB_NAME;
+    private static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
 
     private static final String TABLE_ANIMALS = "animals";
     private static final String COLUMN_ANIMALS_ID = "_id";
