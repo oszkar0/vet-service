@@ -17,6 +17,9 @@ import oskar.vetservice.model.DataSource;
 import oskar.vetservice.model.Owner;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -151,5 +154,38 @@ public class MainWindowController {
             System.out.println("Error loading AnimalsDetailsView.fxml: " + e.getMessage());
         }
 
+    }
+
+    public void deleteSelectedAnimal(){
+        Animal selectedAnimal = animalsTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedAnimal == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No animal selected");
+            alert.setHeaderText("You didn't select the animal");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            if(DataSource.getInstance().deleteAnimalBy(selectedAnimal.getId())){
+                Path deletePhotoPath = Paths.get(selectedAnimal.getPhotoPath());
+                try {
+                    Files.delete(deletePhotoPath);
+                } catch (IOException e){
+                    System.out.println("Error deleting animals photo: " + e.getMessage());
+                }
+
+                animals.remove(selectedAnimal);
+            };
+        } catch(SQLException e) {
+            System.out.println("Error deleting animal: " + e.getMessage());
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Animal deleted successfully");
+        alert.setHeaderText("Animal deleted successfully");
+        alert.showAndWait();
     }
 }
