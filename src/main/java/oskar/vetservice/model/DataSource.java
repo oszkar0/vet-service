@@ -74,6 +74,9 @@ public class DataSource {
     private static final String QUERY_OWNERS_BY_NAME_OR_SURNAME = QUERY_ALL_OWNERS + " WHERE "
             + COLUMN_OWNERS_NAME +" LIKE ? OR " + COLUMN_OWNERS_SURNAME +" LIKE ?";
 
+    private static final String DELETE_ANIMAL_BY_ID = "DELETE FROM " + TABLE_ANIMALS + " WHERE " + COLUMN_ANIMALS_ID
+            + " = ?";
+
 
 
 
@@ -87,6 +90,7 @@ public class DataSource {
     private PreparedStatement queryOwnersByNameOrSurname;
     private PreparedStatement insertAnimal;
     private PreparedStatement insertOwner;
+    private PreparedStatement deleteAnimalById;
     private static DataSource instance = new DataSource();
     private DataSource(){};
     public static DataSource getInstance(){return instance;}
@@ -106,6 +110,7 @@ public class DataSource {
             queryOwnersCountByNameSurnamePhoneNumber = connection.prepareStatement(QUERY_OWNERS_COUNT_BY_NAME_SURNAME_PHONE_NUMBER);
             queryOwnersByNameOrSurname = connection.prepareStatement(QUERY_OWNERS_BY_NAME_OR_SURNAME);
             queryAnimalsByName = connection.prepareStatement(QUERY_ANIMALS_BY_NAME);
+            deleteAnimalById = connection.prepareStatement(DELETE_ANIMAL_BY_ID);
 
             return true;
         } catch (SQLException e){
@@ -157,6 +162,10 @@ public class DataSource {
 
             if(queryAllAnimals != null){
                 queryAllAnimals.close();
+            }
+
+            if(deleteAnimalById != null){
+                deleteAnimalById.close();
             }
             connection.close();
         } catch (SQLException e){
@@ -283,7 +292,14 @@ public class DataSource {
         return animals;
     }
 
+    public boolean deleteAnimalBy(int id) throws SQLException{
+        deleteAnimalById.setInt(1 ,id);
 
+        int rowsAffected = deleteAnimalById.executeUpdate();
+
+        //if rows affected = 1 then one row was deleted and thats ok, else something went wrong
+        return rowsAffected == 1;
+    }
 
     private LocalDate stringToDate(String date){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
