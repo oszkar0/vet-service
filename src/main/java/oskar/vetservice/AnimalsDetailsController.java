@@ -35,6 +35,8 @@ public class AnimalsDetailsController {
         }
 
         animalPhoto.setImage(new Image("file:" + path));
+        animalPhoto.setFitHeight(200);
+        animalPhoto.setFitWidth(400);
     }
 
     public void setAnimalNameLabel(String name){
