@@ -135,6 +135,13 @@ public class MainWindowController {
             return;
         }
 
+        //find owner in owners list
+        int ownerId = selectedAnimal.getOwnerId();
+        Owner animalsOwner = owners.stream()
+                .filter(owner -> {return owner.getId() == ownerId;})
+                .findFirst()
+                .orElse(null);
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/AnimalsDetailsView.fxml"));
             Parent root = fxmlLoader.load();
@@ -147,7 +154,8 @@ public class MainWindowController {
 
             AnimalsDetailsController controller = fxmlLoader.getController();
             controller.setContent(selectedAnimal.getPhotoPath(), selectedAnimal.getName() ,selectedAnimal.getSpecies(), selectedAnimal.getBirthday(), selectedAnimal.getGender(),
-                    "x" , "x" , "x" , "x", "x ", "y", "y");
+                    animalsOwner.getName() , animalsOwner.getSurname() , animalsOwner.getEmail() , animalsOwner.getPhoneNumber(), animalsOwner.getCity(), animalsOwner.getStreet()
+                    , animalsOwner.getHouseNumber());
             stage.showAndWait();
 
         } catch (IOException e) {
