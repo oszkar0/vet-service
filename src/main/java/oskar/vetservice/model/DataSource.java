@@ -1,6 +1,5 @@
 package oskar.vetservice.model;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,6 +76,15 @@ public class DataSource {
     private static final String DELETE_ANIMAL_BY_ID = "DELETE FROM " + TABLE_ANIMALS + " WHERE " + COLUMN_ANIMALS_ID
             + " = ?";
 
+    private static final String DELETE_ANIMALS_BY_OWNER_ID = "DELETE FROM " + TABLE_ANIMALS + " WHERE " + COLUMN_ANIMALS_OWNER_ID
+            + " = ?";
+
+    private static final String DELETE_OWNER_BY_ID = "DELETE FROM " + TABLE_OWNERS + " WHERE " + COLUMN_OWNERS_ID
+            + " = ? ";
+
+    private static final String  QUERY_ANIMALS_BY_OWNER_ID = "SELECT * FROM " + TABLE_ANIMALS + " WHERE "
+            + COLUMN_ANIMALS_OWNER_ID + " = ?";
+
 
 
 
@@ -91,6 +99,9 @@ public class DataSource {
     private PreparedStatement insertAnimal;
     private PreparedStatement insertOwner;
     private PreparedStatement deleteAnimalById;
+    private PreparedStatement deleteAnimalsByOwnerId;
+    private PreparedStatement deleteOwnerById;
+    private PreparedStatement queryAnimalsByOwnerId;
     private static DataSource instance = new DataSource();
     private DataSource(){};
     public static DataSource getInstance(){return instance;}
@@ -111,6 +122,9 @@ public class DataSource {
             queryOwnersByNameOrSurname = connection.prepareStatement(QUERY_OWNERS_BY_NAME_OR_SURNAME);
             queryAnimalsByName = connection.prepareStatement(QUERY_ANIMALS_BY_NAME);
             deleteAnimalById = connection.prepareStatement(DELETE_ANIMAL_BY_ID);
+            deleteAnimalsByOwnerId = connection.prepareStatement(DELETE_ANIMALS_BY_OWNER_ID);
+            deleteOwnerById = connection.prepareStatement(DELETE_OWNER_BY_ID);
+            queryAnimalsByOwnerId = connection.prepareStatement(QUERY_ANIMALS_BY_OWNER_ID);
 
             return true;
         } catch (SQLException e){
@@ -129,6 +143,36 @@ public class DataSource {
             System.out.println("Couldn't create tables' creation statement " + e.getMessage());
         }
 
+    }
+
+    public boolean turnAutoCommit(boolean turn){
+        try {
+            connection.setAutoCommit(turn);
+        } catch (SQLException e){
+            System.out.println("Error turning autocommit " + (turn ? "on" : "off"));
+            return false;
+        }
+        return true;
+    }
+
+    public boolean commit(){
+        try {
+            connection.commit();
+        } catch (SQLException e){
+            System.out.println("Error committing: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public boolean rollback(){
+        try {
+            connection.rollback();
+        } catch (SQLException e){
+            System.out.println("Error committing: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
     public void close(){
         try{
@@ -167,6 +211,19 @@ public class DataSource {
             if(deleteAnimalById != null){
                 deleteAnimalById.close();
             }
+
+            if(deleteAnimalsByOwnerId != null){
+                deleteAnimalsByOwnerId.close();
+            }
+
+            if(deleteOwnerById != null){
+                deleteOwnerById.close();
+            }
+
+            if(queryAnimalsByOwnerId != null){
+                queryAnimalsByOwnerId.close();
+            }
+
             connection.close();
         } catch (SQLException e){
             System.out.println("Couldn't close database connection " + e.getMessage());
@@ -292,7 +349,7 @@ public class DataSource {
         return animals;
     }
 
-    public boolean deleteAnimalBy(int id) throws SQLException{
+    public boolean deleteAnimalByItsId(int id) throws SQLException{
         deleteAnimalById.setInt(1 ,id);
 
         int rowsAffected = deleteAnimalById.executeUpdate();
@@ -300,6 +357,38 @@ public class DataSource {
         //if rows affected = 1 then one row was deleted and thats ok, else something went wrong
         return rowsAffected == 1;
     }
+
+    public List<Animal> gueryAnimalsByItsOwnerId(int ownerId) throws SQLException{
+        queryAnimalsByOwnerId.setInt(1, ownerId);
+        ResultSet results = queryAnimalsByOwnerId.executeQuery();
+
+        List<Animal> animals = new ArrayList<>();
+
+        while(results.next()){
+            Animal animal = new Animal();
+            animal.setId(results.getInt(1));
+            animal.setName(capitalizeFirstLetter(results.getString(2)));
+            animal.setBirthday(stringToDate(results.getString(3)));
+            animal.setSpecies(results.getString(4));
+            animal.setGender(results.getString(5));
+            animal.setPhotoPath(results.getString(6));
+            animal.setOwnerId(results.getInt(7));
+            animals.add(animal);
+        }
+
+        return animals;
+    }
+    public void deleteAnimalsByItsOwnerId(int ownerId) throws SQLException{
+        deleteAnimalsByOwnerId.setInt(1, ownerId);
+        deleteAnimalsByOwnerId.executeUpdate();
+    }
+
+    public void deleteOwnerByHisId(int id) throws SQLException{
+        deleteOwnerById.setInt(1, id);
+        deleteOwnerById.executeUpdate();
+    }
+
+
 
     private LocalDate stringToDate(String date){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("d/MM/yyyy"));
