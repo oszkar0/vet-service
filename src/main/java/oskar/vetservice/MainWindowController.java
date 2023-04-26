@@ -3,7 +3,6 @@ package oskar.vetservice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,7 +174,7 @@ public class MainWindowController {
         }
 
         try {
-            if(DataSource.getInstance().deleteAnimalBy(selectedAnimal.getId())){
+            if(DataSource.getInstance().deleteAnimalByItsId(selectedAnimal.getId())){
                 Path deletePhotoPath = Paths.get(selectedAnimal.getPhotoPath());
                 try {
                     Files.delete(deletePhotoPath);
@@ -185,7 +183,7 @@ public class MainWindowController {
                 }
 
                 animals.remove(selectedAnimal);
-            };
+            }
         } catch(SQLException e) {
             System.out.println("Error deleting animal: " + e.getMessage());
             return;
@@ -195,5 +193,60 @@ public class MainWindowController {
         alert.setTitle("Animal deleted successfully");
         alert.setHeaderText("Animal deleted successfully");
         alert.showAndWait();
+    }
+
+    public void deleteSelectedOwnerAndHisAnimals(){
+        Owner selectedOwner = ownersTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedOwner == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No owner selected");
+            alert.setHeaderText("You didn't select the animal's owner");
+            alert.showAndWait();
+            return;
+        }
+
+        //find owners animals in animals table view
+        Animal[] ownersAnimalsInTableView = animals.stream()
+                                                  .filter(animal -> {return animal.getOwnerId() == selectedOwner.getId();})
+                                                  .toArray(Animal[]::new);
+        //turn off autocommit
+        DataSource.getInstance().turnAutoCommit(false);
+
+        try{
+            List<Animal> animalsToDelete = DataSource.getInstance().gueryAnimalsByItsOwnerId(selectedOwner.getId());
+            DataSource.getInstance().deleteAnimalsByItsOwnerId(selectedOwner.getId());
+            //delete animals from table view
+            for(Animal animal: ownersAnimalsInTableView){
+                animals.remove(animal);
+            }
+
+            //delete animals photos using path from db as animals ObservableArray
+            //can contain only others owner animals
+            for(Animal animal: animalsToDelete){
+                Path deletePhotoPath = Paths.get(animal.getPhotoPath());
+                Files.delete(deletePhotoPath);
+            }
+        } catch (SQLException| IOException  e){
+            System.out.println("Error deleting owners animals: " + e.getMessage());
+            DataSource.getInstance().rollback();
+            DataSource.getInstance().turnAutoCommit(true);
+            return;
+        }
+
+        try{
+            DataSource.getInstance().deleteOwnerByHisId(selectedOwner.getId());
+            owners.remove(selectedOwner);
+        } catch (SQLException e){
+            System.out.println("Error deleting owner: " + e.getMessage());
+            DataSource.getInstance().rollback();
+            DataSource.getInstance().turnAutoCommit(true);
+            return;
+        }
+
+        //commit changes and turn autocommit on
+        DataSource.getInstance().commit();
+        DataSource.getInstance().turnAutoCommit(true);
+
     }
 }
