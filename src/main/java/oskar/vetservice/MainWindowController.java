@@ -3,6 +3,7 @@ package oskar.vetservice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,22 +39,12 @@ public class MainWindowController {
         owners = FXCollections.observableArrayList();
         ownersTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         ownersTableView.setItems(owners);
-        try {
-            owners.setAll(DataSource.getInstance().getAllOwners());
-        } catch(SQLException e){
-            System.out.println("Error getting owners from db: " + e.getMessage());
-            Platform.exit();
-        }
+        getAndSetAllOwners();
 
         animals = FXCollections.observableArrayList();
         animalsTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         animalsTableView.setItems(animals);
-        try {
-            animals.setAll(DataSource.getInstance().getAllAnimals());
-        } catch(SQLException e){
-            System.out.println("Error getting animals from db: " + e.getMessage());
-            Platform.exit();
-        }
+        getAndSetAllAnimals();
     }
     @FXML
     public void showAddNewOwnerWindow(){
@@ -249,4 +240,61 @@ public class MainWindowController {
         DataSource.getInstance().turnAutoCommit(true);
 
     }
+    @FXML
+    private void getAndSetAllAnimals(){
+        Task<List<Animal>> getAllAnimalsTask = new Task<List<Animal>>() {
+            @Override
+            protected List<Animal> call() throws Exception {
+               return DataSource.getInstance().getAllAnimals();
+            }
+
+            @Override
+            protected void succeeded() {
+                animals.setAll(getValue());
+            }
+
+            @Override
+            protected void failed() {
+                Throwable exception = getException();
+                if(exception instanceof SQLException){
+                    System.out.println("Error getting animals from database: " + exception.getMessage());
+                } else {
+                    System.out.println("Unexpected exception occurred: " + exception.getMessage());
+                }
+                Platform.exit();
+            }
+        };
+
+        new Thread(getAllAnimalsTask).start();
+    }
+    @FXML
+    private void getAndSetAllOwners() {
+        Task<List<Owner>> getAllOwnersTask = new Task<List<Owner>>() {
+            @Override
+            protected List<Owner> call() throws Exception {
+                return DataSource.getInstance().getAllOwners();
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                owners.setAll(getValue());
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                Throwable exception = getException();
+                if(exception instanceof SQLException){
+                    System.out.println("Error getting owners from database: " + exception.getMessage());
+                } else {
+                    System.out.println("Unexpected exception occurred: " + exception.getMessage());
+                }
+                Platform.exit();
+            }
+        };
+
+        new Thread(getAllOwnersTask).start();
+    }
+
 }
