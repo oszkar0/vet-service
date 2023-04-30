@@ -207,7 +207,7 @@ public class MainWindowController {
         DataSource.getInstance().turnAutoCommit(false);
 
         try{
-            List<Animal> animalsToDelete = DataSource.getInstance().gueryAnimalsByItsOwnerId(selectedOwner.getId());
+            List<Animal> animalsToDelete = DataSource.getInstance().queryAnimalsByItsOwnerId(selectedOwner.getId());
             DataSource.getInstance().deleteAnimalsByItsOwnerId(selectedOwner.getId());
             //delete animals from table view
             for(Animal animal: ownersAnimalsInTableView){
@@ -311,7 +311,15 @@ public class MainWindowController {
             return;
         }
 
+        try {
+            List<Animal> selectedPersonsAnimals = DataSource.getInstance().queryAnimalsByItsOwnerId(selectedOwner.getId());
+            animals.setAll(selectedPersonsAnimals);
+        } catch (SQLException e){
+            System.out.println("Error getting selected person's animals from db: " + e.getMessage());
+            return;
+        }
+
         viewingModelLabel.setText("Viewing only " + selectedOwner.getName() + " " + selectedOwner.getSurname()
-                                    + "'s animals" );
+                + "'s animals" );
     }
 }
