@@ -31,6 +31,8 @@ public class MainWindowController {
     private TableView<Owner> ownersTableView;
     @FXML
     private BorderPane mainWindow;
+    @FXML
+    private Label viewingModelLabel;
 
     ObservableList<Owner> owners;
     ObservableList<Animal> animals;
@@ -297,4 +299,19 @@ public class MainWindowController {
         new Thread(getAllOwnersTask).start();
     }
 
+    @FXML
+    public void viewSelectedPersonsAnimals(){
+        Owner selectedOwner = ownersTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedOwner == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No owner selected");
+            alert.setHeaderText("You didn't select the animal's owner");
+            alert.showAndWait();
+            return;
+        }
+
+        viewingModelLabel.setText("Viewing only " + selectedOwner.getName() + " " + selectedOwner.getSurname()
+                                    + "'s animals" );
+    }
 }

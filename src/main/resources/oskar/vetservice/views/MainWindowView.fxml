@@ -8,11 +8,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.Label?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="oskar.vetservice.MainWindowController"
             fx:id="mainWindow">
     <center>
         <VBox>
+            <Label fx:id="viewingModelLabel" text="Viewing all animals" textFill="green"/>
             <TableView fx:id="animalsTableView">
                 <columns>
 
@@ -75,7 +77,7 @@
                 <Button text="View animal details" maxWidth="Infinity" onMouseClicked="#showAnimalsDetailsWindow"/>
                 <Button text="Add new animal for selected person" maxWidth="Infinity" onMouseClicked="#showAddNewAnimalWindow"/>
                 <Button text="Add new owner" maxWidth="Infinity" onMouseClicked="#showAddNewOwnerWindow"/>
-                <Button text="View selected person animals" maxWidth="Infinity"/>
+                <Button text="View selected persons animals" maxWidth="Infinity" onMouseClicked="#viewSelectedPersonsAnimals"/>
                 <Button text="Delete selected animal" maxWidth="Infinity" onMouseClicked="#deleteSelectedAnimal"/>
                 <Button text="Delete selected owner and his animals" maxWidth="Infinity" onMouseClicked="#deleteSelectedOwnerAndHisAnimals"/>
             </children>
