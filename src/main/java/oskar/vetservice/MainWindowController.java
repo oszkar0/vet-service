@@ -33,6 +33,8 @@ public class MainWindowController {
     private BorderPane mainWindow;
     @FXML
     private Label viewingModelLabel;
+    @FXML
+    private Button viewAllAnimalsButton;
 
     ObservableList<Owner> owners;
     ObservableList<Animal> animals;
@@ -47,6 +49,7 @@ public class MainWindowController {
         animalsTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         animalsTableView.setItems(animals);
         getAndSetAllAnimals();
+        viewAllAnimalsButton.setDisable(true);
     }
     @FXML
     public void showAddNewOwnerWindow(){
@@ -321,5 +324,12 @@ public class MainWindowController {
 
         viewingModelLabel.setText("Viewing only " + selectedOwner.getName() + " " + selectedOwner.getSurname()
                 + "'s animals" );
+        viewAllAnimalsButton.setDisable(false);
+    }
+
+    @FXML
+    public void viewAllAnimals(){
+        getAndSetAllAnimals();
+        viewAllAnimalsButton.setDisable(true);
     }
 }
