@@ -358,7 +358,7 @@ public class DataSource {
         return rowsAffected == 1;
     }
 
-    public List<Animal> gueryAnimalsByItsOwnerId(int ownerId) throws SQLException{
+    public List<Animal> queryAnimalsByItsOwnerId(int ownerId) throws SQLException{
         queryAnimalsByOwnerId.setInt(1, ownerId);
         ResultSet results = queryAnimalsByOwnerId.executeQuery();
 
