@@ -169,30 +169,37 @@ public class MainWindowController {
             return;
         }
 
-        try {
-            if(DataSource.getInstance().deleteAnimalByItsId(selectedAnimal.getId())){
-               String photoPath = selectedAnimal.getPhotoPath();
-               //handle situation when photo might not have been added
-               if(!photoPath.equalsIgnoreCase("none")) {
-                    try {
-                        Path deletePhotoPath = Paths.get(photoPath);
-                        Files.delete(deletePhotoPath);
-                    } catch (IOException e) {
-                        System.out.println("Error deleting animals photo: " + e.getMessage());
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Delete " + selectedAnimal.getName() + "?");
+        confirmation.setHeaderText("Are you sure you want to delete " + selectedAnimal.getName() + "?");
+        Optional<ButtonType> result = confirmation.showAndWait();
+
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                if (DataSource.getInstance().deleteAnimalByItsId(selectedAnimal.getId())) {
+                    String photoPath = selectedAnimal.getPhotoPath();
+                    //handle situation when photo might not have been added
+                    if (!photoPath.equalsIgnoreCase("none")) {
+                        try {
+                            Path deletePhotoPath = Paths.get(photoPath);
+                            Files.delete(deletePhotoPath);
+                        } catch (IOException e) {
+                            System.out.println("Error deleting animals photo: " + e.getMessage());
+                        }
                     }
+
+                    animals.remove(selectedAnimal);
                 }
-
-                animals.remove(selectedAnimal);
+            } catch (SQLException e) {
+                System.out.println("Error deleting animal: " + e.getMessage());
+                return;
             }
-        } catch(SQLException e) {
-            System.out.println("Error deleting animal: " + e.getMessage());
-            return;
-        }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Animal deleted successfully");
-        alert.setHeaderText("Animal deleted successfully");
-        alert.showAndWait();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Animal deleted successfully");
+            alert.setHeaderText("Animal deleted successfully");
+            alert.showAndWait();
+        }
     }
 
     public void deleteSelectedOwnerAndHisAnimals(){
@@ -206,57 +213,66 @@ public class MainWindowController {
             return;
         }
 
-        //find owners animals in animals table view
-        Animal[] ownersAnimalsInTableView = animals.stream()
-                                                  .filter(animal -> {return animal.getOwnerId() == selectedOwner.getId();})
-                                                  .toArray(Animal[]::new);
-        //turn off autocommit
-        DataSource.getInstance().turnAutoCommit(false);
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Delete " + selectedOwner.getName() + " " + selectedOwner.getSurname() + "?");
+        confirmation.setHeaderText("Are you sure you want to delete " + selectedOwner.getName() + " " + selectedOwner.getSurname() +
+                " and his/her animals?");
+        Optional<ButtonType> result = confirmation.showAndWait();
 
-        try{
-            List<Animal> animalsToDelete = DataSource.getInstance().queryAnimalsByItsOwnerId(selectedOwner.getId());
-            DataSource.getInstance().deleteAnimalsByItsOwnerId(selectedOwner.getId());
-            //delete animals from table view
-            for(Animal animal: ownersAnimalsInTableView){
-                animals.remove(animal);
-            }
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            //find owners animals in animals table view
+            Animal[] ownersAnimalsInTableView = animals.stream()
+                    .filter(animal -> {
+                        return animal.getOwnerId() == selectedOwner.getId();
+                    })
+                    .toArray(Animal[]::new);
+            //turn off autocommit
+            DataSource.getInstance().turnAutoCommit(false);
 
-            //delete animals photos using path from db as animals ObservableArray
-            //can contain only others owner animals
-            for(Animal animal: animalsToDelete){
-                String photoPath = animal.getPhotoPath();
-                //handle situation where photo might not have been added
-                if(!photoPath.equalsIgnoreCase("none")) {
-                    Path deletePhotoPath = Paths.get(photoPath);
-                    Files.delete(deletePhotoPath);
+            try {
+                List<Animal> animalsToDelete = DataSource.getInstance().queryAnimalsByItsOwnerId(selectedOwner.getId());
+                DataSource.getInstance().deleteAnimalsByItsOwnerId(selectedOwner.getId());
+                //delete animals from table view
+                for (Animal animal : ownersAnimalsInTableView) {
+                    animals.remove(animal);
                 }
+
+                //delete animals photos using path from db as animals ObservableArray
+                //can contain only others owner animals
+                for (Animal animal : animalsToDelete) {
+                    String photoPath = animal.getPhotoPath();
+                    //handle situation where photo might not have been added
+                    if (!photoPath.equalsIgnoreCase("none")) {
+                        Path deletePhotoPath = Paths.get(photoPath);
+                        Files.delete(deletePhotoPath);
+                    }
+                }
+            } catch (SQLException | IOException e) {
+                System.out.println("Error deleting owners animals: " + e.getMessage());
+                DataSource.getInstance().rollback();
+                DataSource.getInstance().turnAutoCommit(true);
+                return;
             }
-        } catch (SQLException| IOException  e){
-            System.out.println("Error deleting owners animals: " + e.getMessage());
-            DataSource.getInstance().rollback();
+
+            try {
+                DataSource.getInstance().deleteOwnerByHisId(selectedOwner.getId());
+                owners.remove(selectedOwner);
+            } catch (SQLException e) {
+                System.out.println("Error deleting owner: " + e.getMessage());
+                DataSource.getInstance().rollback();
+                DataSource.getInstance().turnAutoCommit(true);
+                return;
+            }
+
+            //commit changes and turn autocommit on
+            DataSource.getInstance().commit();
             DataSource.getInstance().turnAutoCommit(true);
-            return;
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Owner deleted successfully");
+            alert.setHeaderText("Owner deleted successfully");
+            alert.showAndWait();
         }
-
-        try{
-            DataSource.getInstance().deleteOwnerByHisId(selectedOwner.getId());
-            owners.remove(selectedOwner);
-        } catch (SQLException e){
-            System.out.println("Error deleting owner: " + e.getMessage());
-            DataSource.getInstance().rollback();
-            DataSource.getInstance().turnAutoCommit(true);
-            return;
-        }
-
-        //commit changes and turn autocommit on
-        DataSource.getInstance().commit();
-        DataSource.getInstance().turnAutoCommit(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Owner deleted successfully");
-        alert.setHeaderText("Owner deleted successfully");
-        alert.showAndWait();
-
     }
     @FXML
     private void getAndSetAllAnimals(){
