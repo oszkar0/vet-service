@@ -252,6 +252,11 @@ public class MainWindowController {
         DataSource.getInstance().commit();
         DataSource.getInstance().turnAutoCommit(true);
 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Owner deleted successfully");
+        alert.setHeaderText("Owner deleted successfully");
+        alert.showAndWait();
+
     }
     @FXML
     private void getAndSetAllAnimals(){
