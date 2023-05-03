@@ -16,7 +16,8 @@ public class Animal {
     private int ownerId;
 
 
-    public Animal(String name, String species, String gender, LocalDate birthday, int ownerId, String photoPath) {
+    public Animal(int id,String name, String species, String gender, LocalDate birthday, int ownerId, String photoPath) {
+        this.id = id;
         this.name.set(name);
         this.species.set(species);
         this.gender.set(gender);

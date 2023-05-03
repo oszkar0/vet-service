@@ -77,7 +77,7 @@ public class AddNewAnimalController {
         try {
             if (!DataSource.getInstance().ownerHasAnimal(name, birthday, ownerId)) {
                 int createdId = DataSource.getInstance().insertAnimal(name, ownerId,birthday,species,gender,pathToPhoto);
-                return new Animal(name, species, gender, birthday, ownerId, pathToPhoto);
+                return new Animal(createdId ,name, species, gender, birthday, ownerId, pathToPhoto);
             } else {
                 //add alert if owner has an animal
                 return null;
