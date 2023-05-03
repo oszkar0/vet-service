@@ -171,11 +171,15 @@ public class MainWindowController {
 
         try {
             if(DataSource.getInstance().deleteAnimalByItsId(selectedAnimal.getId())){
-                Path deletePhotoPath = Paths.get(selectedAnimal.getPhotoPath());
-                try {
-                    Files.delete(deletePhotoPath);
-                } catch (IOException e){
-                    System.out.println("Error deleting animals photo: " + e.getMessage());
+               String photoPath = selectedAnimal.getPhotoPath();
+               //handle situation when photo might not have been added
+               if(!photoPath.equalsIgnoreCase("none")) {
+                    try {
+                        Path deletePhotoPath = Paths.get(photoPath);
+                        Files.delete(deletePhotoPath);
+                    } catch (IOException e) {
+                        System.out.println("Error deleting animals photo: " + e.getMessage());
+                    }
                 }
 
                 animals.remove(selectedAnimal);
@@ -220,8 +224,12 @@ public class MainWindowController {
             //delete animals photos using path from db as animals ObservableArray
             //can contain only others owner animals
             for(Animal animal: animalsToDelete){
-                Path deletePhotoPath = Paths.get(animal.getPhotoPath());
-                Files.delete(deletePhotoPath);
+                String photoPath = animal.getPhotoPath();
+                //handle situation where photo might not have been added
+                if(!photoPath.equalsIgnoreCase("none")) {
+                    Path deletePhotoPath = Paths.get(photoPath);
+                    Files.delete(deletePhotoPath);
+                }
             }
         } catch (SQLException| IOException  e){
             System.out.println("Error deleting owners animals: " + e.getMessage());
