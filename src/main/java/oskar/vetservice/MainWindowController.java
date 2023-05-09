@@ -359,6 +359,7 @@ public class MainWindowController {
     @FXML
     public void viewAllAnimals(){
         getAndSetAllAnimals();
+        viewingModelLabel.setText("Viewing all animals");
         viewAllAnimalsButton.setDisable(true);
     }
 }
